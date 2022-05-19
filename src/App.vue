@@ -1,55 +1,42 @@
 <template>
-    <v-app>
-      <v-app-bar  >
-            <v-img
-                class="mx-2"
-                :src="logo"
-                max-height="40"
-                max-width="40"
-                contain
-            ></v-img>
-            <v-app-bar-title  >Tutorial</v-app-bar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn 
-                    variant="text"
-                    @click="goList"
-                    >
-                  List
-                </v-btn>
-                <v-btn 
-                    variant="text"
-                    @click="goAdd"
-                    >
-                  Add
-                </v-btn>
-            </v-toolbar-items>
-      </v-app-bar>
-      <v-main >
-        <v-container>
-          <router-view />
-        </v-container>
-      </v-main>  
-    </v-app>
+  <h1>Hello</h1>
+  <v-app>
+    <v-app-bar>
+      <v-app-bar-title>
+        <v-btn variant="text" @click="goHome"> Album </v-btn>
+      </v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn variant="text" @click="goLogin"> Login </v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items>
+        <v-btn variant="text" @click="goSignup"> Signup </v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
+    <v-main>
+      <v-container>
+        <router-view />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import logo from './assets/oc-logo-white.png'
 export default {
-  name: 'App',
+  name: "App",
 
-  data: () => ({
-    logo,
-  }),
+  data: () => ({}),
   methods: {
-    goAdd() {
-      this.$router.push({ name: 'add' });
+    goLogin() {
+      this.$router.push({ name: "login" });
     },
-    goList() {
-      this.$router.push({ name: 'tutorials' });
-    }
+    goHome() {
+      this.$router.push({ name: "home" });
+    },
+    goSignup() {
+      this.$router.push({ name: "signup" });
+    },
   },
-
-}
+};
 </script>
 
