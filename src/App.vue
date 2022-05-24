@@ -11,13 +11,13 @@
             <v-app-bar-title  >Tutorial</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-btn 
+                <v-btn
                     variant="text"
                     @click="goList"
                     >
                   List
                 </v-btn>
-                <v-btn 
+                <v-btn
                     variant="text"
                     @click="goAdd"
                     >
@@ -29,7 +29,7 @@
         <v-container>
           <router-view />
         </v-container>
-      </v-main>  
+      </v-main>
     </v-app>
 </template>
 
