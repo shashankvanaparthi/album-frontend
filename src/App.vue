@@ -1,7 +1,6 @@
 <template>
-  <h1>Hello</h1>
   <v-app>
-    <v-app-bar>
+    <v-app-bar v-if="isLogged===false">
       <v-app-bar-title>
         <v-btn variant="text" @click="goHome"> Album </v-btn>
       </v-app-bar-title>
@@ -13,6 +12,16 @@
         <v-btn variant="text" @click="goSignup"> Signup </v-btn>
       </v-toolbar-items>
     </v-app-bar>
+
+    <v-app-bar v-else>
+      <v-app-bar-title>
+        <v-btn variant="text" @click="goHome"> Album </v-btn>
+      </v-app-bar-title>
+      <v-toolbar-items>
+        <v-btn variant="text" @click="signOut"> LogOut </v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
+
     <v-main>
       <v-container>
         <router-view />
@@ -25,7 +34,11 @@
 export default {
   name: "App",
 
-  data: () => ({}),
+  data() {
+    return {
+      isLogged: this.checkIfIsLogged(),
+    };
+  },
   methods: {
     goLogin() {
       this.$router.push({ name: "login" });
@@ -35,6 +48,28 @@ export default {
     },
     goSignup() {
       this.$router.push({ name: "signup" });
+    },
+    signOut() {
+      localStorage.removeItem("token");
+      this.isLogged = this.checkIfIsLogged();
+      this.$router.push({ name: "home" });
+    },
+
+    checkIfIsLogged() {
+      console.log("check");
+      console.log(this.isLogged);
+      let token = localStorage.token;
+      if (token) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    created() {
+      this.$on("logged", () => {
+        console.log("Changed")
+        this.isLogged = this.checkIfIsLogged();
+      });
     },
   },
 };

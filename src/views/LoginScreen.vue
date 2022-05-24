@@ -1,48 +1,76 @@
 <template>
-  <v-container class="grey lighten-5">
-    <v-row align="center" justify="center">
-      <v-col md="6">
-        <v-card class="pa-2" outlined tile>
-          <v-card-title>Login</v-card-title>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              required
-            ></v-text-field>
+  <v-app>
+    <v-main>
+      <v-container fluid fill-height>
+        <v-row align="center" justify="center">
+          <v-col md="6">
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="primary">
+                  <v-toolbar-title>Login form</v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form>
+                    <v-text-field
+                      v-model="user.email"
+                      name="email"
+                      label="Email"
+                      type="text"
+                      placeholder="Email"
+                      required
+                    ></v-text-field>
 
-            <v-text-field
-              v-model="password"
-              label="Password"
-              required
-            ></v-text-field>
+                    <v-text-field
+                      v-model="user.password"
+                      name="password"
+                      label="Password"
+                      type="password"
+                      placeholder="password"
+                      required
+                    ></v-text-field>
 
-            <v-btn color="primary" @click="login"> Login </v-btn>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+                    <v-btn
+                      @click="login"
+                      class="mt-4"
+                      color="primary"
+                      value="log in"
+                      >Login</v-btn
+                    >
+                  </v-form>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-export default {
-  data: () => ({
-    valid: true,
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
-    select: null,
-  }),
+import UserDataService from "../services/UserDataService"
 
+export default {
+  name: "Login",
+  data() {
+    return {
+      user: {
+        email: "",
+        password: "",
+      },
+    };
+  },
   methods: {
     login() {
-        console.log("Login")
-      // login logic
-      // this.$refs.form.resetValidation()
+      const { user } = this;
+      UserDataService.login(user).then((response)=>{
+        console.log(response.data)
+        localStorage.setItem("token",response.data.token)
+        this.$emit('logged', 'User logged')
+        this.$router.push({name:"userhome",params:{id:response.data.userId}})
+      },error=>{
+        console.log(error)
+      })
     },
   },
 };
