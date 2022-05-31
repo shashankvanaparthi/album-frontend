@@ -1,10 +1,22 @@
 import { createWebHistory, createRouter } from "vue-router";
 import {isUsersLogged} from "./services/UserAuthenticationService";
 const routes =  [
-{
+  {
     path: "/",
     name: "home",
     component: () => import("./views/Home.vue")
+  },
+  {
+    path: "/user/:id",
+    name: "userhome",
+    component: () => import("./views/UserHomeScreen.vue"),
+    props:true
+  },
+  {
+    path: "/album/:id",
+    name: "album",
+    component: ()=> import("./views/TrackList.vue"),
+    props:true
   },
   {
     path: "/login",
@@ -18,20 +30,6 @@ const routes =  [
     component: () => import("./views/SignupScreen.vue"),
     props:true
   },
-
- {
-    path: "/user/:id",
-    name: "userhome",
-    component: () => import("./views/UserHomeScreen.vue"),
-    props:true
-  },
-  {
-    path: "/album/:id",
-    name: "album",
-    component: ()=> import("./views/TrackList.vue"),
-    props:true
-  },
-
   {
     path: "/create",
     name: "create",
@@ -46,6 +44,11 @@ const routes =  [
     path: "/createTrack",
     name: "createTrack",
     component: ()=> import("./views/CreateTrack.vue")
+  },
+  {
+    path: "/createArtist",
+    name: "createArtist",
+    component: ()=> import("./views/CreateArtist.vue")
   }
 ];
 const router = createRouter({
