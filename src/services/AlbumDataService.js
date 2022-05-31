@@ -13,7 +13,9 @@ class AlbumDataService{
         return http.post("/album",{userId:userId,album:album})
     }
 
-
+    searchAlbums(searchKey,userId){
+        return http.get("/album/search",{params:{userId:userId,key:searchKey}})
+    }
 
     updateAlbum(album,userId){
         return http.put("/album",{userId:userId,album:album});

@@ -3,7 +3,21 @@
     <v-row>
       <v-col>
         <v-toolbar dark color="blue darken-3" class="mb-1">
-
+          <div class="input-group">
+            <input
+              type="text"
+              v-model="searchKey"
+              class="form-control mx-auto"
+              placeholder="Search By TrackName or AlbumName"
+              aria-label="albumSearch"
+              aria-describedby="basic-addon2"
+            />
+            <div class="input-group-append">
+              <button @click="searchAlbums" class="btn btn-dark" type="button">
+                Search
+              </button>
+            </div>
+          </div>
         </v-toolbar>
       </v-col>
     </v-row>
@@ -145,7 +159,19 @@ export default {
       return albums.data;
     },
 
-
+    searchAlbums() {
+      const { searchKey } = this;
+      console.log(searchKey);
+      const userId = localStorage.userId;
+      AlbumDataService.searchAlbums(searchKey, userId).then(
+        (response) => {
+          this.albums = response.data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
 
     viewAlbum(albumId) {
       this.$router.push({ name: "album", params: { id: albumId } });
