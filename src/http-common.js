@@ -2,9 +2,9 @@ import axios from "axios";
 
 var baseurl = "";
 if (process.env.NODE_ENV === "development") {
-  baseurl = "http://localhost/api/";
+  baseurl = "http://localhost:8080/api/v1";
 } else {
-  baseurl = "/api/";
+  baseurl = "/api/v1";
 }
  
 export default axios.create({

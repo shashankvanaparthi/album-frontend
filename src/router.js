@@ -1,39 +1,51 @@
 import { createWebHistory, createRouter } from "vue-router";
+import {isUsersLogged} from "./services/UserAuthenticationService";
 const routes =  [
-  {
+{
     path: "/",
-    alias: "/tutorials",
-    name: "tutorials",
-    component: () => import("./views/TutorialsList.vue")
+    name: "home",
+    component: () => import("./views/Home.vue")
   },
   {
-    path: "/edit/:id",
-    name: "edit",
-    component: () => import("./views/EditTutorial.vue"),
-    props: true
+    path: "/login",
+    name: "login",
+    component: () => import("./views/LoginScreen.vue"),
+    props:true
   },
   {
-    path: "/add",
-    name: "add",
-    component: () => import("./views/AddTutorial.vue")
+    path: "/signup",
+    name: "signup",
+    component: () => import("./views/SignupScreen.vue"),
+    props:true
+  },
+
+ {
+    path: "/user/:id",
+    name: "userhome",
+    component: () => import("./views/UserHomeScreen.vue"),
+    props:true
   },
   {
-    path: "/view",
-    name: "view",
-    component: () => import("./views/ViewTutorial.vue"),
-    props: true
+    path: "/album/:id",
+    name: "album",
+    component: ()=> import("./views/TrackList.vue"),
+    props:true
+  },
+
+  {
+    path: "/create",
+    name: "create",
+    component:()=>import("./views/CreateView.vue")
   },
   {
-    path: "/addLesson",
-    name: "addLesson",
-    component: () => import("./views/AddLesson.vue"),
-    props: true
+    path: "/createAlbum",
+    name: "createAlbum",
+    component: ()=> import("./views/CreateAlbum.vue")
   },
   {
-    path: "/editLesson",
-    name: "editLesson",
-    component: () => import("./views/EditLesson.vue"),
-    props: true
+    path: "/createTrack",
+    name: "createTrack",
+    component: ()=> import("./views/CreateTrack.vue")
   }
 ];
 const router = createRouter({
@@ -41,5 +53,15 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+router.beforeEach((to, from) => {
+  console.log(to.name);
+  if(isUsersLogged() && to.name=="home"){
+      console.log("redirecting")
+      const userId = localStorage.userId
+      return "/user/"+userId;
+  }
+  return true
+})
 
 export default router;
