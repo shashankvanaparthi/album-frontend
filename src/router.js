@@ -1,6 +1,23 @@
 import { createWebHistory, createRouter } from "vue-router";
 import {isUsersLogged} from "./services/UserAuthenticationService";
 const routes =  [
+{
+    path: "/",
+    name: "home",
+    component: () => import("./views/Home.vue")
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("./views/LoginScreen.vue"),
+    props:true
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: () => import("./views/SignupScreen.vue"),
+    props:true
+  },
 
  {
     path: "/user/:id",
