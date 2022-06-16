@@ -30,6 +30,8 @@
           <tr>
             <th scope="col">Id</th>
             <th scope="col">Name</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Track Link</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +39,15 @@
             <tr>
               <th scope="row">{{ track.id }}</th>
               <td>{{ track.name }}</td>
+              <td>{{ track.duration }}</td>
+              <td>
+                <v-btn @click="viewTrack(track.link)">View</v-btn>
+              </td>
+              <td>
+                <button type="button" @click="openEditTrackDialog(track)" class="btn btn-success">
+                  Edit
+                </button>
+              </td>
             </tr>
           </template>
         </tbody>
@@ -49,14 +60,16 @@
         <v-card-text>
           <v-container fluid>
             <v-row>
-              <v-text-field
-                v-model="track.name"
-                name="name"
-                label="Name"
-                type="text"
-                placeholder="Track Name"
-                required
-              ></v-text-field>
+              <v-text-field v-model="track.name" name="name" label="Name" type="text" placeholder="Track Name" required>
+              </v-text-field>
+            </v-row>
+            <v-row>
+              <v-text-field v-model="track.duration" name="duration" label="Duration" type="text" placeholder="Duration"
+                required></v-text-field>
+            </v-row>
+            <v-row>
+              <v-text-field v-model="track.link" name="link" label="link" type="text" placeholder="Track Link" required>
+              </v-text-field>
             </v-row>
           </v-container>
         </v-card-text>
@@ -66,6 +79,35 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="editDialog" persistent max-width="600px">
+      <v-card min-width="600px">
+        <v-card-title class="text-h5"> Edit Track Details </v-card-title>
+        <v-card-text>
+          <v-container fluid>
+            <v-row>
+              <v-text-field v-model="editTrack.name" name="name" label="Name" type="text" placeholder="Track Name"
+                required></v-text-field>
+            </v-row>
+            <v-row>
+              <v-text-field v-model="editTrack.duration" name="duration" label="Duration" type="text"
+                placeholder="Duration" required></v-text-field>
+            </v-row>
+            <v-row>
+              <v-text-field v-model="editTrack.link" name="link" label="link" type="text" placeholder="Track Link"
+                required></v-text-field>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="editDialog = false"> Cancel </v-btn>
+          <v-btn color="green darken-1" text @click="updateTrack"> Update </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
   </v-container>
 </template>
 
@@ -78,8 +120,17 @@ export default {
       trackList: [],
       track: {
         name: "",
+        duration: null,
+        link: "",
+      },
+      editTrack: {
+        id: "",
+        name: "",
+        duration: "",
+        link: ""
       },
       dialog: false,
+      editDialog: false
     };
   },
 
@@ -136,6 +187,45 @@ export default {
         }
       );
     },
+
+    viewTrack(trackLink) {
+      console.log("View Track is called");
+      if (trackLink) {
+        console.log("Opening")
+        window.open(trackLink, '_newtab')
+      }
+    },
+
+    openEditTrackDialog(track) {
+      this.editTrack.name = track.name;
+      this.editTrack.id = track.id;
+      this.editTrack.duration = track.duration;
+      this.editTrack.link = track.link;
+      this.editDialog = true
+    },
+
+    updateTrack() {
+      console.log("Update Track is called ", this.editTrack)
+      const userId = localStorage.userId
+      TrackDataService.updateTrack(userId, this.editTrack).then(res => {
+        console.log(res);
+        this.getAllTracks(userId).then(
+          (res) => {
+            this.trackList = res;
+            console.log(res);
+            this.editDialog=false;
+          },
+          (err) => {
+            console.log(err);
+            alert("Something went wrong")
+          }
+        );
+      }, error => {
+        console.log(error);
+        alert("Something went wrong")
+      })
+    }
+
   },
 
   created() {

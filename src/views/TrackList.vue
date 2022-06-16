@@ -65,8 +65,11 @@
           <v-row dense>
             <v-col cols="12">
               <v-card color="#385F73" dark>
-                <v-card-title class="text-h5">
+                <v-card-title  style="cursor: pointer;" @click="openLink(track.link)" class="text-h5">
                   {{ track.name }}
+                </v-card-title>
+                <v-card-title class="text-h5">
+                  {{ track.duration }}
                 </v-card-title>
                 <v-card-actions>
                   <v-btn
@@ -137,12 +140,6 @@ export default {
       );
     },
 
-    viewTrack(trackId) {
-      //This needs to be implemented
-      //this.$router.push({ name: "album", params: { id: albumId } });
-      console.log("Album view more is clicked");
-    },
-
     deleteTrack(track) {
       console.log("Delete Track is clicked ");
       const albumId = this.$route.params.id;
@@ -164,6 +161,15 @@ export default {
         }
       );
     },
+
+    openLink(trackLink){
+      console.log("Open Link is clicked ",trackLink)
+      if(trackLink){
+        console.log("Opening")
+        window.open(trackLink,'_newtab')
+      }
+    }
+
   },
 
   created() {
