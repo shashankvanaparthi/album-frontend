@@ -27,6 +27,11 @@
                   Edit
                 </button>
               </td>
+              <td>
+                <button type="button" @click="deleteArtist(artist.id)" class="btn btn-danger">
+                  Delete
+                </button>
+              </td>
             </tr>
           </template>
         </tbody>
@@ -113,7 +118,7 @@ export default {
           (response) => {
             this.artistList = response;
             console.log(response);
-            this.editDialog=false;
+            this.editDialog = false;
           },
           (err) => {
             console.log(err);
@@ -124,6 +129,27 @@ export default {
         console.log(error);
         alert("Something went wrong")
       })
+    },
+
+    deleteArtist(artistId) {
+      console.log("Delete Artist by Id is called " + artistId);
+      ArtistDataService.deleteArtist(artistId).then(res => {
+        const userId = localStorage.userId;
+        this.getAllArtists(userId).then(
+          (res) => {
+            this.artistList = res;
+            console.log(res);
+          },
+          (err) => {
+            console.log(err);
+            alert("Something went wrong, please refresh the page")
+          }
+        );
+      }, error => {
+        console.log("Deleting Artist Failed")
+        alert("Artist Deletion Failed")
+      })
+
     },
 
     addArtist() {

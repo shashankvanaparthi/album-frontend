@@ -25,9 +25,9 @@
         <v-btn variant="text" @click="goFavourite"> Favourites </v-btn>
       </v-toolbar-items>
 
-      <v-toolbar-items>
+      <!-- <v-toolbar-items>
         <v-btn variant="text" @click="goPurchase"> Purchase </v-btn>
-      </v-toolbar-items>
+      </v-toolbar-items> -->
 
       <v-toolbar-items>
         <v-btn variant="text" @click="signOut"> LogOut </v-btn>

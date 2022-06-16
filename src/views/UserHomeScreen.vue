@@ -21,7 +21,7 @@
     <v-row v-if="albums.length != 0">
       <template v-for="album in albums" :key="album.id">
         <v-card class="my-4" min-width="374">
-          <v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>
+          <v-img height="250" src="https://previews.123rf.com/images/artqu/artqu1305/artqu130500245/19466681-abstract-musical-background-for-music-event-design.jpg"></v-img>
 
           <div class="container">
             <div class="row">
@@ -55,9 +55,9 @@
                     class="bi bi-heart-fill"></i>
                 </span>
               </div>
-              <div class="col-md-2">
+              <!-- <div class="col-md-2">
                 <v-switch v-model="album.isForSale" :input-value="true" @change="saleItem(album)"></v-switch>
-              </div>
+              </div> -->
             </div>
           </div>
 

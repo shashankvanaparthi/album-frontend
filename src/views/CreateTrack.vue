@@ -48,6 +48,11 @@
                   Edit
                 </button>
               </td>
+              <td>
+                <button type="button" @click="deleteTrack(track.id)" class="btn btn-danger">
+                  Delete
+                </button>
+              </td>
             </tr>
           </template>
         </tbody>
@@ -144,20 +149,21 @@ export default {
       console.log("Delete Track is clicked ", trackId);
       TrackDataService.deleteTrack(trackId).then(
         (res) => {
-          console.log(res);
-          const albumId = this.$route.params.id;
-          this.getAllTracks(albumId).then(
-            (trackList) => {
-              this.trackList = trackList;
-              console.log(this.trackList);
+          const userId = localStorage.userId;
+          this.getAllTracks(userId).then(
+            (res) => {
+              this.trackList = res;
+              console.log(res);
             },
-            (error) => {
-              console.log(error);
+            (err) => {
+              console.log(err);
+              alert("Something went wrong, please refresh the page")
             }
           );
         },
         (error) => {
           console.log(error);
+          alert("Track Deletion Failed")
         }
       );
     },
@@ -176,6 +182,8 @@ export default {
               this.trackList = trackList;
               console.log(this.trackList);
               this.track.name = "";
+              this.track.duration="";
+              this.track.link=""
             },
             (error) => {
               console.log(error);
@@ -213,7 +221,7 @@ export default {
           (res) => {
             this.trackList = res;
             console.log(res);
-            this.editDialog=false;
+            this.editDialog = false;
           },
           (err) => {
             console.log(err);

@@ -13,6 +13,10 @@ class ArtistDataService{
         return http.put("/artist",{userId:userId,artist:artist})
     }
 
+    deleteArtist(artistId){
+        return http.delete("/artist/"+artistId)
+    }
+
 }
 
 export default new ArtistDataService()
