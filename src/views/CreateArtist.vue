@@ -22,6 +22,11 @@
             <tr>
               <th scope="row">{{ artist.id }}</th>
               <td>{{ artist.name }}</td>
+              <td>
+                <button type="button" @click="openEditArtistDialog(artist)" class="btn btn-success">
+                  Edit
+                </button>
+              </td>
             </tr>
           </template>
         </tbody>
@@ -34,14 +39,8 @@
         <v-card-text>
           <v-container fluid>
             <v-row>
-              <v-text-field
-                v-model="artist.name"
-                name="name"
-                label="Name"
-                type="text"
-                placeholder="Artist Name"
-                required
-              ></v-text-field>
+              <v-text-field v-model="artist.name" name="name" label="Name" type="text" placeholder="Artist Name"
+                required></v-text-field>
             </v-row>
           </v-container>
         </v-card-text>
@@ -51,6 +50,26 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="editDialog" persistent max-width="600px">
+      <v-card min-width="600px">
+        <v-card-title class="text-h5"> Edit Artist Details </v-card-title>
+        <v-card-text>
+          <v-container fluid>
+            <v-row>
+              <v-text-field v-model="editArtist.name" name="name" label="Name" type="text" placeholder="Artist Name"
+                required></v-text-field>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="editDialog = false"> Cancel </v-btn>
+          <v-btn color="green darken-1" text @click="editArtistFunc"> Update </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -64,7 +83,12 @@ export default {
       artist: {
         name: "",
       },
+      editArtist: {
+        name: "",
+        id: null
+      },
       dialog: false,
+      editDialog: false
     };
   },
 
@@ -74,26 +98,32 @@ export default {
       return artists.data;
     },
 
-    deleteArtist(artistId) {
-      console.log("Delete Artist is clicked ", artistId);
-    //   TrackDataService.deleteTrack(trackId).then(
-    //     (res) => {
-    //       console.log(res);
-    //       const albumId = this.$route.params.id;
-    //       this.getAllTracks(albumId).then(
-    //         (trackList) => {
-    //           this.trackList = trackList;
-    //           console.log(this.trackList);
-    //         },
-    //         (error) => {
-    //           console.log(error);
-    //         }
-    //       );
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
+    openEditArtistDialog(artist) {
+      this.editArtist.name = artist.name;
+      this.editArtist.id = artist.id;
+      this.editDialog = true
+    },
+
+    editArtistFunc() {
+      console.log("Edit Artist is clicked ", this.editArtist);
+      const userId = localStorage.userId;
+      ArtistDataService.updateArtist(userId, this.editArtist).then(res => {
+        console.log(res);
+        this.getAllArtists(userId).then(
+          (response) => {
+            this.artistList = response;
+            console.log(response);
+            this.editDialog=false;
+          },
+          (err) => {
+            console.log(err);
+            alert("Something,went wrong")
+          }
+        );
+      }, error => {
+        console.log(error);
+        alert("Something went wrong")
+      })
     },
 
     addArtist() {

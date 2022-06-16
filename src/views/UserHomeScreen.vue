@@ -4,14 +4,8 @@
       <v-col>
         <v-toolbar dark color="blue darken-3" class="mb-1">
           <div class="input-group">
-            <input
-              type="text"
-              v-model="searchKey"
-              class="form-control mx-auto"
-              placeholder="Search By TrackName or AlbumName"
-              aria-label="albumSearch"
-              aria-describedby="basic-addon2"
-            />
+            <input type="text" v-model="searchKey" class="form-control mx-auto"
+              placeholder="Search By TrackName or AlbumName or ArtistName" aria-label="albumSearch" aria-describedby="basic-addon2" />
             <div class="input-group-append">
               <button @click="searchAlbums" class="btn btn-dark" type="button">
                 Search
@@ -27,36 +21,48 @@
     <v-row v-if="albums.length != 0">
       <template v-for="album in albums" :key="album.id">
         <v-card class="my-4" min-width="374">
-          <v-img
-            height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-          ></v-img>
-          <v-card-title>{{ album.name }}</v-card-title>
-          <v-card-text>
-            <v-row align="center" class="mx-0"> </v-row>
+          <v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>
 
-            <div>
-              {{ album.description }}
-            </div>
-          </v-card-text>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8">
 
-          <v-card-text>
-            <v-row align="center" class="mx-0"> </v-row>
-            <div>
-              {{
-                album.artist == undefined || album.artist == null
-                  ? "No Artist"
-                  : album.artist.name
-              }}
+                <v-card-title>{{ album.name }}</v-card-title>
+
+                <v-card-text>
+                  <v-row align="center" class="mx-0"> </v-row>
+
+                  <div>
+                    {{ album.description }}
+                  </div>
+                </v-card-text>
+
+                <v-card-text>
+                  <v-row align="center" class="mx-0"> </v-row>
+                  <div>
+                    {{
+                        album.artist == undefined || album.artist == null
+                          ? "No Artist"
+                          : album.artist.name
+                    }}
+                  </div>
+                </v-card-text>
+              </div>
+              <div class="col-md-2 mt-3">
+                <span style="cursor: pointer;" id='clickableAwesomeFont' @click="addToFavourite(album)">
+                  <i style="font-size: 20px;"
+                    v-bind:style="[album.isFavourite ? { color: '#FF0000' } : { color: '#000' }]"
+                    class="bi bi-heart-fill"></i>
+                </span>
+              </div>
+              <div class="col-md-2">
+                <v-switch v-model="album.isForSale" :input-value="true" @change="saleItem(album)"></v-switch>
+              </div>
             </div>
-          </v-card-text>
+          </div>
 
           <v-card-actions>
-            <v-btn
-              color="deep-purple lighten-2"
-              text
-              @click="viewAlbum(album.id)"
-            >
+            <v-btn color="deep-purple lighten-2" text @click="viewAlbum(album.id)">
               View
             </v-btn>
 
@@ -78,32 +84,16 @@
         <v-card-text>
           <v-container fluid>
             <v-row>
-              <v-text-field
-                v-model="updateAlbumForm.name"
-                name="name"
-                label="Name"
-                type="text"
-                placeholder="Album Name"
-                required
-              ></v-text-field>
+              <v-text-field v-model="updateAlbumForm.name" name="name" label="Name" type="text" placeholder="Album Name"
+                required></v-text-field>
             </v-row>
             <v-row>
-              <v-text-field
-                v-model="updateAlbumForm.description"
-                name="description"
-                label="Description"
-                type="text"
-                placeholder="Description"
-                required
-              ></v-text-field>
+              <v-text-field v-model="updateAlbumForm.description" name="description" label="Description" type="text"
+                placeholder="Description" required></v-text-field>
             </v-row>
 
             <v-row class="d-flex" cols="12" sm="6">
-              <select
-                v-model="updateAlbumForm.artistId"
-                label="Artist"
-                class="form-select"
-              >
+              <select v-model="updateAlbumForm.artistId" label="Artist" class="form-select">
                 <template v-for="artist in artists" :key="artist.id">
                   <option :value="artist.id">{{ artist.name }}</option>
                 </template>
@@ -154,7 +144,6 @@ export default {
       console.log("hello");
       const albums = await AlbumDataService.getAllAlbums(userId);
       const userArtists = await ArtistDataService.getAllArtistForUser(userId);
-      console.log(userArtists.data);
       this.artists = userArtists.data;
       return albums.data;
     },
@@ -209,6 +198,25 @@ export default {
       this.dialog = true;
     },
 
+    addToFavourite(album) {
+      const userId = localStorage.userId;
+      AlbumDataService.addToFavourite(album, userId).then((response) => {
+        console.log(response);
+        this.getAllAlbums(userId).then(
+          (albumsList) => {
+            this.albums = albumsList;
+            console.log(this.albums)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      },
+        (error) => {
+          console.log(error);
+        })
+    },
+
     updateAlbum() {
       console.log("Upadate Album is clicked");
       const userId = localStorage.userId;
@@ -232,6 +240,18 @@ export default {
         }
       );
     },
+
+    saleItem(album) {
+      console.log("Sale Album is clicked", album)
+      const userId = localStorage.userId;
+      AlbumDataService.sellAlbum(album, userId).then((response) => {
+        console.log(response);
+      },
+        (error) => {
+          console.log(error);
+        })
+    },
+
   },
   created() {
     const userId = this.$route.params.id;

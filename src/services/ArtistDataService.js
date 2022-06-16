@@ -9,6 +9,10 @@ class ArtistDataService{
         return http.post("/artist/user",{userId:userId,artist:artist})
     }
 
+    updateArtist(userId,artist){
+        return http.put("/artist",{userId:userId,artist:artist})
+    }
+
 }
 
 export default new ArtistDataService()

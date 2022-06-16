@@ -22,7 +22,21 @@
         <v-btn variant="text" @click="goCreate"> Create </v-btn>
       </v-toolbar-items>
       <v-toolbar-items>
+        <v-btn variant="text" @click="goFavourite"> Favourites </v-btn>
+      </v-toolbar-items>
+
+      <v-toolbar-items>
+        <v-btn variant="text" @click="goPurchase"> Purchase </v-btn>
+      </v-toolbar-items>
+
+      <v-toolbar-items>
         <v-btn variant="text" @click="signOut"> LogOut </v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items>
+        <a class="nav-link" @click="goProfile" style="cursor: pointer;" id="navbarDropdownMenuLink-4"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="https://placeimg.com/50/50/any" class="rounded-circle z-depth-0" alt="avatar image" height="30">
+        </a>
       </v-toolbar-items>
     </v-app-bar>
 
@@ -35,7 +49,7 @@
 </template>
 
 <script>
-import {isUsersLogged} from "./services/UserAuthenticationService"
+import { isUsersLogged } from "./services/UserAuthenticationService"
 export default {
   name: "App",
 
@@ -59,6 +73,17 @@ export default {
       localStorage.removeItem("userId");
       this.isLogged = isUsersLogged();
       this.$router.push({ name: "home" });
+    },
+    goFavourite(){
+      this.$router.push({name:"favourite"})
+    },
+
+    goProfile() {
+      this.$router.push({ name: 'profile' })
+    },
+
+    goPurchase(){
+      this.$router.push({name: "purchaseAlbums"})
     },
 
     goCreate() {
