@@ -38,11 +38,19 @@
             <v-card-text>
               <v-form>
                 <v-text-field
-                  v-model="user.name"
-                  name="name"
-                  label="Name"
+                  v-model="user.firstName"
+                  name="firstname"
+                  label="FirstName"
                   type="text"
-                  placeholder="Name"
+                  placeholder="First Name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="user.lastName"
+                  name="laseName"
+                  label="LastName"
+                  type="text"
+                  placeholder="Last Name"
                   required
                 ></v-text-field>
 
@@ -63,6 +71,16 @@
                   placeholder="password"
                   required
                 ></v-text-field>
+
+                <v-text-field
+                  v-model="user.phoneNo"
+                  name="phone"
+                  label="PhoneNo"
+                  type="text"
+                  placeholder="Phone"
+                  required
+                ></v-text-field>
+
                 <v-btn
                   @click="signup"
                   class="mt-4"
@@ -86,7 +104,9 @@ export default {
   data() {
     return {
       user: {
-        name: "",
+        firstName: "",
+        lastName: "",
+        phoneNo:"",
         email: "",
         password: "",
       },
@@ -97,8 +117,8 @@ export default {
     signup() {
       const { user } = this;
 
-      if (user.name == "") {
-        alert("UserName must not be empty");
+      if (user.firstName == "" || user.phoneNo=="" || user.lastName=="" || user.email=="" || user.password=="") {
+        alert("All the required fields must not be empty");
         return;
       }
 
@@ -114,12 +134,15 @@ export default {
         return;
       }
 
+      console.log(this.user)
+
       UserDataService.signup(user).then(
         (response) => {
           console.log(response);
           this.$router.push({ name: "login" });
         },
         (error) => {
+          alert(error.response.data.message)
           console.log(error);
         }
       );

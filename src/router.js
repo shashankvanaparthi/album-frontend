@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
-import {isUsersLogged} from "./services/UserAuthenticationService";
-const routes =  [
+import { isUsersLogged } from "./services/UserAuthenticationService";
+const routes = [
   {
     path: "/",
     name: "home",
@@ -10,45 +10,65 @@ const routes =  [
     path: "/user/:id",
     name: "userhome",
     component: () => import("./views/UserHomeScreen.vue"),
-    props:true
+    props: true
   },
   {
     path: "/album/:id",
     name: "album",
-    component: ()=> import("./views/TrackList.vue"),
-    props:true
+    component: () => import("./views/TrackList.vue"),
+    props: true
   },
   {
     path: "/login",
     name: "login",
     component: () => import("./views/LoginScreen.vue"),
-    props:true
+    props: true
   },
   {
     path: "/signup",
     name: "signup",
     component: () => import("./views/SignupScreen.vue"),
-    props:true
+    props: true
   },
   {
     path: "/create",
     name: "create",
-    component:()=>import("./views/CreateView.vue")
+    component: () => import("./views/CreateView.vue")
   },
   {
     path: "/createAlbum",
     name: "createAlbum",
-    component: ()=> import("./views/CreateAlbum.vue")
+    component: () => import("./views/CreateAlbum.vue")
   },
   {
     path: "/createTrack",
     name: "createTrack",
-    component: ()=> import("./views/CreateTrack.vue")
+    component: () => import("./views/CreateTrack.vue")
   },
   {
     path: "/createArtist",
     name: "createArtist",
-    component: ()=> import("./views/CreateArtist.vue")
+    component: () => import("./views/CreateArtist.vue")
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("./views/Profile.vue")
+  },
+  {
+    path: "/favourite",
+    name: "favourite",
+    component: () => import("./views/Favourite.vue")
+  },
+  {
+    path: "/forgotPassword",
+    name: "forgotPassword",
+    component: () => import("./views/ForgotPassword.vue")
+  },
+  {
+    path: "/purchaseAlbums",
+    name: "purchaseAlbums",
+    component: () => import("./views/PurchaseAlbum.vue")
   }
 ];
 const router = createRouter({
@@ -59,10 +79,10 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   console.log(to.name);
-  if(isUsersLogged() && to.name=="home"){
-      console.log("redirecting")
-      const userId = localStorage.userId
-      return "/user/"+userId;
+  if (isUsersLogged() && (to.name == "home" || to.name == "login" || to.name == "signup")) {
+    console.log("redirecting")
+    const userId = localStorage.userId
+    return "/user/" + userId; 
   }
   return true
 })
