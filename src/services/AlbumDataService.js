@@ -25,6 +25,26 @@ class AlbumDataService{
         return http.get("/album/"+albumId,{params:{userId:userId}})
     }
 
+    addToFavourite(album,userId){
+        return http.put("/album/favourite",{userId:userId,album:album})
+    }
+
+    getAllFavourites(userId){
+        return http.get("/album/favourite/"+userId)
+    }
+
+    sellAlbum(album,userId){
+        return http.put("/album/sale",{userId:userId,album:album})
+    }
+
+    getAllsellAlbums(userId){
+        return http.get("/album/sale/"+userId)
+    }
+
+    purchaseAlbum(userId,album){
+        return http.put("/album/purchase",{userId:userId,album:album})
+    }
+
 }
 
 export default new AlbumDataService()

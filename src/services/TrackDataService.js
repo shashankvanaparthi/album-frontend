@@ -30,6 +30,10 @@ class TrackDataService{
         return http.post("/album/addTrack",{albumId:albumId,trackId:trackId})
     }
 
+    updateTrack(userId,track){
+        return http.put("/track",{userId:userId,track:track})
+    }
+
 
 
 }
