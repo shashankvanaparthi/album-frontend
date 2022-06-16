@@ -11,31 +11,15 @@
                 </v-toolbar>
                 <v-card-text>
                   <v-form>
-                    <v-text-field
-                      v-model="user.email"
-                      name="email"
-                      label="Email"
-                      type="text"
-                      placeholder="Email"
-                      required
-                    ></v-text-field>
+                    <v-text-field v-model="user.email" name="email" label="Email" type="text" placeholder="Email"
+                      required></v-text-field>
 
-                    <v-text-field
-                      v-model="user.password"
-                      name="password"
-                      label="Password"
-                      type="password"
-                      placeholder="password"
-                      required
-                    ></v-text-field>
-
-                    <v-btn
-                      @click="login"
-                      class="mt-4"
-                      color="primary"
-                      value="log in"
-                      >Login</v-btn
-                    >
+                    <v-text-field v-model="user.password" name="password" label="Password" type="password"
+                      placeholder="password" required></v-text-field>
+                    <v-card-actions>
+                      <v-btn @click="login" color="blue" value="log in">Login</v-btn>
+                      <v-btn color="green darken-1" text @click="forgotPassword">Forgot Password</v-btn>
+                    </v-card-actions>
                   </v-form>
                 </v-card-text>
               </v-card>
@@ -79,6 +63,15 @@ export default {
         }
       );
     },
+    forgotPassword(){
+      // console.log("Forgot password is clicked")
+      // UserDataService.forgotPassword().then(res=>{
+      //   console.log(res)
+      // },error=>{
+      //   console.log(error)
+      // })
+      this.$router.push({name:"forgotPassword"})
+    }
   },
 };
 </script>
